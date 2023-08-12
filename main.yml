@@ -1,6 +1,5 @@
 ---
 - hosts: all
   tasks:
-    - name: testing debug
-      debug:
-        msg: debug works in "{{ inventory_hostname }}"
+    - name: ping the host
+      ping:
