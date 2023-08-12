@@ -1,6 +1,6 @@
 ---
-hosts: all
-tasks:
-  - name: testing debug
-    debug:
-      msg: debug works in "{{ inventory_hostname }}"
+- hosts: all
+  tasks:
+    - name: testing debug
+      debug:
+        msg: debug works in "{{ inventory_hostname }}"
