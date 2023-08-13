@@ -11,8 +11,8 @@
     owner: srinu
   with_sequence: start=1 end="{{ total_vagrant_boxes }}" stride=1
 
-- name: starting all vagrant boxes
-  command: "vagrant up"
-  args:
-    chdir: "{{ vagrant_root_dir }}/vagrant{{ item }}"
-  with_sequence: start=1 end="{{ total_vagrant_boxes }}" stride=1
+# - name: starting all vagrant boxes
+#   command: "vagrant up"
+#   args:
+#     chdir: "{{ vagrant_root_dir }}/vagrant{{ item }}"
+#   with_sequence: start=1 end="{{ total_vagrant_boxes }}" stride=1
