@@ -1,0 +1,18 @@
+- name: creating directories for "{{ total_vagrant_boxes }}" vagrant_boxes
+  file:
+    path: "{{ vagrant_root_dir }}/vagrant{{ item }}"
+    state: directory
+  with_sequence: start=1 end="{{ total_vagrant_boxes }}" stride=1
+
+- name: creating Vagrantfile with "{{ vagrant_box_image }}" in all directories
+  template:
+    src: "vagrant/Vagrantfile.j2"
+    dest: "{{ vagrant_root_dir }}/vagrant{{ item }}/Vagrantfile"
+    owner: srinu
+  with_sequence: start=1 end="{{ total_vagrant_boxes }}" stride=1
+
+# - name: starting all vagrant boxes
+#   command: "vagrant up"
+#   args:
+#     chdir: "{{ vagrant_root_dir }}/vagrant{{ item }}"
+#   with_sequence: start=1 end="{{ total_vagrant_boxes }}" stride=1

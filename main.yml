@@ -1,5 +1,9 @@
 ---
-- hosts: all
+- hosts: localhost
+  tags: vagrant
   tasks:
-    - name: ping the host
-      ping:
+    - name: vagrant spinup
+      include_role:
+        name: vagrant
+      vars:
+        vagrant_box_image: "ubuntu/focal64"
