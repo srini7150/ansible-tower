@@ -1,6 +1,8 @@
 ---
-- hosts: all
+- hosts: localhost
   tasks:
-    - name: testing debug
-      debug:
-        msg: debug works in "{{ inventory_hostname }}"
+    - name: vagrant spinup
+      include_role:
+        name: vagrant
+      vars:
+        vagrant_box_image: "ubuntu/focal64"
