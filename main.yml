@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
+  tags: vagrant
   tasks:
     - name: vagrant spinup
       include_role:
