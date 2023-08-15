@@ -13,4 +13,3 @@
   tasks:
     - name: pinging server "{{ inventory_hostname }}"
       ping:
-
