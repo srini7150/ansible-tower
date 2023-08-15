@@ -7,3 +7,9 @@
         name: vagrant
       vars:
         vagrant_box_image: "ubuntu/focal64"
+
+- hosts: all
+  tags: ping
+    - name: pinging server "{{ inventory_hostname }}"
+      ping:
+
