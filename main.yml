@@ -11,5 +11,5 @@
 - hosts: all
   tags: ping
   tasks:
-    - name: pinging servers
+    - name: pinging server "{{ inventory_hostname }}"
       ping:
