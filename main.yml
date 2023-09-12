@@ -1,15 +1,48 @@
 ---
+#using with_together (this only supports ansible 2.10 or later)
 - hosts: localhost
-  tags: vagrant
-  tasks:
-    - name: vagrant spinup
-      include_role:
-        name: vagrant
-      vars:
-        vagrant_box_image: "ubuntu/focal64"
+  vars:
+    VAR1_values:
+      - value1
+      - value2
+      - value3
+      - value4
+      - value5
+    VAR2_values:
+      - valueA
+      - valueB
+      - valueC
+      - valueD
+      - valueE
 
-- hosts: all
-  tags: ping
   tasks:
-    - name: pinging server "{{ inventory_hostname }}"
-      ping:
+    - name: Perform task with variable replacement
+      debug:
+        msg: "VAR1: {{ item.0 }}, VAR2: {{ item.1 }}"
+      with_together:
+        - "{{ VAR1_values }}"
+        - "{{ VAR2_values }}"
+
+#using loop_control (old alternative for with_together)
+- hosts: localhost
+  vars:
+    VAR1_values:
+      - value1
+      - value2
+      - value3
+      - value4
+      - value5
+    VAR2_values:
+      - valueA
+      - valueB
+      - valueC
+      - valueD
+      - valueE
+
+  tasks:
+    - name: Perform task with indexed loops
+      debug:
+        msg: "VAR1: {{ VAR1_values[idx] }}, VAR2: {{ VAR2_values[idx] }}"
+      loop: "{{ range(0, VAR1_values | length) | list }}"
+      loop_control:
+        loop_var: idx
