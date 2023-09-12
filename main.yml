@@ -43,6 +43,7 @@
     - name: Perform task with indexed loops
       debug:
         msg: "VAR1: {{ VAR1_values[idx] }}, VAR2: {{ VAR2_values[idx] }}"
+      #using range and converting it to list
       loop: "{{ range(0, VAR1_values | length) | list }}"
       loop_control:
-        loop_var: idx
+        index_var: idx
