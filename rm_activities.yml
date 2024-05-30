@@ -1,0 +1,9 @@
+---
+- hosts: localhost  # Assuming you want to run on localhost
+  vars:
+    - var2: something
+  tasks:
+    - name: Print the list
+      debug:
+        msg: "var: {{ item }}-sa-{{ var2 }}"
+      with_items: "{{ my_list.split(',') }}"
