@@ -4,3 +4,4 @@
   tasks:
     - name: pinging server "{{ inventory_hostname }}"
       ping:
+  become_user: vagrant
