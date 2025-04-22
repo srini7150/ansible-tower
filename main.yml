@@ -1,15 +1,6 @@
 ---
-- hosts: localhost
-  tags: vagrant
-  tasks:
-    - name: vagrant spinup
-      include_role:
-        name: vagrant
-      vars:
-        vagrant_box_image: "ubuntu/focal64"
-
 - hosts: all
   tags: ping
   tasks:
-    - name: pinging server "{{ inventory_hostname }}"
+    - name: pinging servers
       ping:
