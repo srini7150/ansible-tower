@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  tasks:
+    - name: get users with UID below 1000
+      shell: "awk -F : '$3 < 1000 {print $1}' /etc/passwd"
+      register: users_list
+    
+    - name: get last login for each user
+      shell: last -n 1 {{ item }}
+      loop: "{{ users_list.stdout_lines }}"
+      register: last_login_info
+
+    - name: Get all users
+      shell: "getent passwd | cut -d: -f1"
+      register: all_users
+
+
+
+    # - name: Combine user and last login
+    #   lineinfile:
+    #     path: ./login_details.txt
+    #     line: "{{ item.stdout }}"
+    #     regexp: '$'
+    #   with_items: "{{ last_login_info.results }}"

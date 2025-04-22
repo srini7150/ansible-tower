@@ -1,0 +1,30 @@
+---
+- name: Extract users with UID < 1000 and their last login details
+  hosts: localhost
+  tasks:
+    - name: Extract users with UID < 1000
+      shell: "awk -F: '$3 < 1000 {print $1}' /etc/passwd"
+      register: low_uid_users
+      changed_when: false
+
+    - name: Initialize empty file for last login details
+      file:
+        path: ./login_details.txt
+        state: touch
+        mode: '0644'
+
+    - name: Get last login details for each user
+      command: "lastlog -u {{ item }}"
+      loop: "{{ low_uid_users.stdout_lines }}"
+      register: last_log_details
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Append last login details to a file
+      lineinfile:
+        path: ./login_details.txt
+        line: "{{ item.stdout | regex_replace(' +', ' ') | trim }}"
+        create: yes
+      loop: "{{ last_log_details.results }}"
+      when: item.stdout is defined and item.stdout != ""
+      changed_when: false

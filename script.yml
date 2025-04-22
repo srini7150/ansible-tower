@@ -1,0 +1,31 @@
+---
+- name: Extract users with UID < 1000 and their last login details
+  hosts: localhost
+  # become: yes
+  tasks:
+    - name: Extract users with UID < 1000
+      shell: "awk -F: '$3 < 1000 {print $1}' /etc/passwd"
+      register: low_uid_users
+      changed_when: false
+
+    - name: Write users with UID < 1000 to a file
+      copy:
+        content: "{{ low_uid_users.stdout }}"
+        dest: /tmp/low_uid_users.txt
+        mode: '0644'
+
+    - name: Get last login details for each user with UID < 1000
+      shell: |
+        lastlog -u {{ item }} | awk '{if (NR!=1) print $1, $2, $3, $4, $5}'
+      loop: "{{ low_uid_users.stdout_lines }}"
+      register: last_log_details
+      ignore_errors: yes
+
+    - name: Save last login details to a file
+      copy:
+        content: |
+          {% for result in last_log_details.results %}
+          {{ result.stdout }}
+          {% endfor %}
+        dest: ./login_details.txt
+        mode: '0644'
