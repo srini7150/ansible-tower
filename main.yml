@@ -1,6 +1,22 @@
 ---
-- hosts: all
-  tags: ping
+- name: ping servers
+  hosts: all
   tasks:
-    - name: pinging servers
+    - name: pinging servers in inventory
       ping:
+
+    - name: printing server ip address
+      debug:
+        msg: "Hi from debug module {{ inventory_hostname  }}"
+
+- name: install packages
+  hosts: all
+  tasks:
+    - name: install neofetch on server
+      apt:
+        update_cache: true
+        name: neofetch
+        state: absent
+        autoremove: true
+        purge: true
+      become: true
