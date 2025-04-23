@@ -1,0 +1,11 @@
+  variables
+  group_vars and host_vars
+  variable precedence
+  jinja2 templating
+  conditionals
+and, or in conditionals
+tags
+register variables
+handlers
+templates
+ansible file_structure

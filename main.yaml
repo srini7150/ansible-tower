@@ -1,0 +1,53 @@
+---
+- name: ping servers
+  hosts: all
+  tags: 
+    - ping
+    - pingpong
+  tasks:
+    - name: pinging servers in inventory
+      ping:
+
+    # - name: printing server ip address
+    #   debug:
+    #     msg: "Hi from debug module {{ inventory_hostname  }}"
+
+- name: install packages
+  hosts: all
+  tags: install
+  tasks:
+    - name: install nginx on ubuntu servers
+      apt:
+        update_cache: true
+        name: nginx
+        state: present
+      become: true
+      when: os_name == 'ubuntu'
+
+    - name: install nginx on rocky servers
+      dnf:
+        update_cache: true
+        name: nginx
+        state: present
+      become: true
+      when: os_name == 'rocky'
+
+    - name: install python3 on rocky servers
+      dnf:
+        update_cache: true
+        name: python3-pip
+        state: present
+      become: true
+      when: os_name == 'rocky'
+
+# provide nginx_state as extra_vars started, stopped, restarted
+- name: "{{ nginx_state }} nginx"
+  hosts: all
+  tags: nginx_state
+  tasks:
+    - name: "{{ nginx_state }} nginx service"
+      ansible.builtin.service:
+        name: nginx
+        state: "{{ nginx_state }}"
+        enabled: true
+      become: true
