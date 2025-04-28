@@ -41,12 +41,33 @@
       when: os_name == 'rocky'
 
 # provide nginx_state as extra_vars started, stopped, restarted
-- name: "{{ nginx_state }} nginx"
+
+- name: Deploy index.html
   hosts: all
-  tags: nginx_state
+  tags: index_file
   tasks:
+    - name: update nginx.conf
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+      become: true
+
+    - name: copy index.html for all servers
+      template:
+        src: index.html.j2
+        dest: /usr/share/nginx/html/index.html
+        owner: root
+        group: root
+        mode: '0644'
+      vars:
+        server_ip: "{{ inventory_hostname  }}"
+      become: true
+
     - name: "{{ nginx_state }} nginx service"
-      ansible.builtin.service:
+      service:
         name: nginx
         state: "{{ nginx_state }}"
         enabled: true
