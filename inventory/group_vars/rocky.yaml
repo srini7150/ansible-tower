@@ -1,3 +1,6 @@
 os_name: rocky
 ansible_python_interpreter: /usr/bin/python3
 nginx_user: nginx
+apache_package: httpd
+apache_conf_path: /etc/httpd/conf/httpd.conf
+apache_service: httpd.service

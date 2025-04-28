@@ -40,8 +40,47 @@
       become: true
       when: os_name == 'rocky'
 
-# provide nginx_state as extra_vars started, stopped, restarted
+- name: install packages using loop and package module
+  hosts: all
+  tags: install_packages
+  tasks:
+    - name: install packages
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - nginx
+        - vim
+        - python3-pip
+        - "{{ apache_package }}"
+      become: true
 
+- name: change apache server port
+  hosts: all
+  tags: apache_port
+  become: true
+  tasks:
+    - name: change port to 8081
+      lineinfile:
+        path: "{{ apache_conf_path }}"
+        regexp: '^Listen 80'
+        line: Listen 8081
+
+    - name: restart apache service
+      service:
+        name: "{{ apache_service }}"
+        state: started
+        enabled: true
+
+    - name: Open the 8081 port
+      ansible.posix.firewalld:
+        port: 8081/tcp
+        permanent: true
+        state: enabled
+        immediate: yes
+      when: os_name == 'rocky'
+
+# provide nginx_state as extra_vars started, stopped, restarted
 - name: Deploy index.html
   hosts: all
   tags: index_file
