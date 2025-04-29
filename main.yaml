@@ -81,9 +81,13 @@
       when: os_name == 'rocky'
 
 # provide nginx_state as extra_vars started, stopped, restarted
-- name: Deploy index.html
-  hosts: all
-  tags: index_file
+- name: Deploy nginx index.html
+  hosts: ubuntu
+  tags: nginx_index_file
+
+  handlers:
+    - import_tasks: handlers/main.yaml
+
   tasks:
     - name: update nginx.conf
       template:
@@ -104,10 +108,19 @@
       vars:
         server_ip: "{{ inventory_hostname  }}"
       become: true
+      notify: Restart Nginx
 
-    - name: "{{ nginx_state }} nginx service"
-      service:
-        name: nginx
-        state: "{{ nginx_state }}"
-        enabled: true
-      become: true
+    # - name: "{{ nginx_state }} nginx service"
+    #   service:
+    #     name: nginx
+    #     state: "{{ nginx_state }}"
+    #     enabled: true
+    #   become: true
+
+- name: docker role usage
+  hosts: ubuntu
+  become: true
+  tags: docker_role
+  roles:
+    - docker
+
