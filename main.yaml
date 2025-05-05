@@ -41,7 +41,7 @@
       when: os_name == 'rocky'
 
 - name: install packages using loop and package module
-  hosts: all
+  hosts: ubuntu
   tags: install_packages
   tasks:
     - name: install packages
@@ -53,6 +53,7 @@
         - vim
         - python3-pip
         - "{{ apache_package }}"
+        - tomcat9
       become: true
 
 - name: change apache server port
@@ -69,7 +70,7 @@
     - name: restart apache service
       service:
         name: "{{ apache_service }}"
-        state: started
+        state: stopped
         enabled: true
 
     - name: Open the 8081 port
@@ -123,4 +124,21 @@
   tags: docker_role
   roles:
     - docker
+
+- name: deploy webapp in tomcat server
+  hosts: ubuntu
+  become: true
+  vars_files:
+    secrets/main.yaml
+  tags: webapp
+  tasks:
+    - name: download webapp to webapps folder
+      get_url:
+        url: http://192.168.1.6:8082/ui/native/libs-snapshot-local/com/devops/demo/webapp/3.0.0-SNAPSHOT/webapp-3.0.0-20250409.140457-1.war
+        dest: /var/lib/tomcat9/webapps/webapp.war
+        username: "{{ jfrog_user }}"
+        password: "{{ jfrog_pass }}"
+        force: yes
+        mode: '0644'
+
 

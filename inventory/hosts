@@ -6,10 +6,10 @@
 192.168.56.106
 
 [ubuntu]
-192.168.56.101 os_name=ubuntu
-192.168.56.102 os_name=ubuntu
-192.168.56.103 os_name=ubuntu
+ubuntu1 ansible_host=192.168.56.101 os_name=ubuntu
+ubuntu2 ansible_host=192.168.56.102 os_name=ubuntu
+ubuntu3 ansible_host=192.168.56.103 os_name=ubuntu
 
 [rocky]
-192.168.56.105 os_name=rocky
-192.168.56.106 os_name=rocky
+rocky1 ansible_host=192.168.56.105 os_name=rocky
+rocky2 ansible_host=192.168.56.106 os_name=rocky
